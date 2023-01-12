@@ -3,21 +3,31 @@
 from pyspark.sql import SparkSession
 
 import os
-os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-streaming-kafka-0-8_2.11:2.1.0,org.apache.spark:spark-sql-kafka-0-10_2.11:2.1.0 pyspark-shell'
+os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-streaming-kafka-0-10_2.12:3.3.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1 pyspark-shell'
 
-spark = SparkSession.builder \
+if __name__ == "__main__":
+    spark = SparkSession.builder \
         .master("local[1]") \
         .appName("SSKafka") \
         .getOrCreate()
 
-inputDF = spark.readStream \
-        .format("kafka") \
-        .option("kafka.bootstrap.servers", "kafka:9092") \
-        .option("subscribe", "sensor") \
-        .option("startingOffsets", "earliest") \
-        .load()
+    # spark.sparkContext.setLogLevel("DEBUG")
 
-ds = inputDF.selectExpr("CAST(value AS STRING)")
+    inputDF = spark.readStream \
+            .format("kafka") \
+            .option("kafka.bootstrap.servers", "localhost:9092") \
+            .option("subscribe", "sensor") \
+            .option("startingOffsets", "earliest") \
+            .load()
 
-print(type(inputDF))
-print(type(ds))
+    ds = inputDF.selectExpr("CAST(value AS STRING)")
+
+    # print(type(inputDF))
+    # print(type(ds))
+
+    writeStream = ds.writeStream \
+    .outputMode("update") \
+    .format("console") \
+    .start()
+
+    writeStream.awaitTermination()
