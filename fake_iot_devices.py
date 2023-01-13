@@ -32,7 +32,7 @@ while True:
 
     msg = f'{time()}, {profile_name}, {temp}, {humd}, {pres}'
 
-    producer.send('sensor', bytes(msg, encoding='utf8'))
+    producer.send('sensors', bytes(msg, encoding='utf8'))
     print(f'sending data to kafka, #{count}')
 
     count += 1
