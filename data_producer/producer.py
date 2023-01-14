@@ -4,6 +4,7 @@ from kafka import KafkaProducer
 from sys import argv
 import numpy as np
 from time import time, sleep
+import json
 
 DEVICE_PROFILES = {
     "jkt": {'temp': (51.3, 17.7), 'humd': (77.4, 18.7), 'pres': (1019.9, 9.5) },
@@ -30,9 +31,15 @@ while True:
     humd = np.random.normal(profile['humd'][0], profile['humd'][1])
     pres = np.random.normal(profile['pres'][0], profile['pres'][1])
 
-    msg = f'{time()}, {profile_name}, {temp}, {humd}, {pres}'
-
-    producer.send('sensors', bytes(msg, encoding='utf8'))
+    data = {
+        "time": time(),
+        "device": profile_name,
+        "temp": temp,
+        "humd": humd,
+        "pres": pres
+    }
+    
+    producer.send('sensors', json.dumps(data).encode('utf-8'))
     print(f'sending data to kafka, #{count}')
 
     count += 1
