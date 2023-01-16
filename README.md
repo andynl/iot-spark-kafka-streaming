@@ -13,7 +13,7 @@ Mock data pipeline which reads a stream of sensor data, aggregates it slightly, 
 ![diagram](img/diagram.png)
 
 ## Quick Start
-Before you run this code, you must have installed Python 3, Apache Kafka, Apache Spark, JDK 8, and MongoDB.
+Before you run this code, you must have installed Python 3, Apache Kafka, Apache Spark, JDK 8, and MongoDB. on your machine.
 
 Run data producer
 ```
