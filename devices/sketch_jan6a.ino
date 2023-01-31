@@ -9,8 +9,8 @@
 
 DHT dht(DHTPIN, DHTTYPE);
 
-const char* ssid = "STS (IND)";
-const char* password = "Ultron008";
+const char* ssid = "";
+const char* password = "";
 
 HTTPClient http; 
 WiFiClient client;
